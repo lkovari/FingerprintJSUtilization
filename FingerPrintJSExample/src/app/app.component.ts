@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
@@ -13,6 +13,11 @@ export class AppComponent {
   fingerprint = signal<string>('Loading...');
   language = navigator.language;
   userAgent = navigator.userAgent;
+  previousFingerprint: string | null = null;
+  changeIx: number = 0;
+  colors: string[] = ['red', 'blue', 'green', 'brown', 'purple', 'orange', 'pink', 'cyan', 'magenta', 'lime'];
+  nextColor: string = this.colors[this.changeIx];
+
 
   ngOnInit() {
     this.listenForChanges();
@@ -22,11 +27,19 @@ export class AppComponent {
   async getFingerprint(): Promise<void> {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
-    this.fingerprint.set(result.visitorId);
+    if (this.previousFingerprint !== result.visitorId) {
+      this.previousFingerprint = result.visitorId;
+      this.fingerprint.set(result.visitorId);
+      this.changeIx = (this.changeIx + 1) % this.colors.length;
+      this.nextColor = this.colors[this.changeIx];
+    }
+  }
+
+  generateColor(): string {
+    return this.nextColor;
   }
 
   listenForChanges() {
-    // React when language or userAgent changes (manually simulate or use real-time APIs)
     window.addEventListener('languagechange', () => this.getFingerprint());
     window.addEventListener('resize', () => this.getFingerprint());
     window.addEventListener('visibilitychange', () => {

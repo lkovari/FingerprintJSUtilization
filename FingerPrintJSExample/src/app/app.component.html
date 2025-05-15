@@ -50,7 +50,7 @@
       </svg>
       <h1>{{ title }}</h1>
       <p><button (click)="getFingerprint()">🎉 Current Fingerpring 🎉</button></p>
-      <p style="color: magenta">{{ fingerprint() }}</p> 
+      <p [style.color]="generateColor()">{{ fingerprint() }}</p> 
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
