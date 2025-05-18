@@ -51,6 +51,20 @@
       <h1>{{ title }}</h1>
       <p><button (click)="getFingerprint()">🎉 Current Fingerpring 🎉</button></p>
       <p [style.color]="generateColor()">{{ fingerprint() }}</p> 
+      <div>
+        @if (gpsLocationService.lat() !== null && gpsLocationService.lon() !== null) {
+          <div>
+            📍 Lat: {{ gpsLocationService.lat() }}
+          </div>
+          <div>
+            📍 Lon: {{ gpsLocationService.lon() }}
+          </div>
+        } @else if (gpsLocationService.error()) {
+          <span>
+            ⚠️ {{ gpsLocationService.error() }}
+          </span>       
+        }
+      </div>
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
@@ -108,14 +122,4 @@
     </div>
   </div>
 </main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
 <router-outlet />

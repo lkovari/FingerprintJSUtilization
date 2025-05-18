@@ -1,6 +1,7 @@
 import { Component, effect, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { GpsLocationService } from './shared/services/gps-location.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,16 @@ export class AppComponent {
   colors: string[] = ['red', 'blue', 'green', 'brown', 'purple', 'orange', 'pink', 'cyan', 'magenta', 'lime'];
   nextColor: string = this.colors[this.changeIx];
 
+  constructor(public gpsLocationService: GpsLocationService) {
+    effect(() => {
+      const lat = this.gpsLocationService.lat();
+      const lon = this.gpsLocationService.lon();
+      if (lat !== null && lon !== null) {
+        console.log('Latitude:', lat, 'Longitude:', lon);
+        this.getFingerprint();
+      }
+    });
+  }
 
   ngOnInit() {
     this.listenForChanges();
